@@ -106,11 +106,11 @@
                      <td class = color1>{{set.year}} </td> 
                      <td class = color1>{{set.part_count}}</td>
                      <td class="color1">
-                        <form id="starred" >
+                        <form id="starred" method="POST" >
                           {% if set.star %}
-                            <button type="submit" class="star-btn"></button>
+                            <button type="submit" class="star-btn" name="star" value = true></button>
                           {% else %}
-                            <button type="submit" class="star-btn"></button>
+                            <button type="submit" class="star-btn" name="star" value = false></button>
                           {% endif %}
                         </form>
                       </td>
