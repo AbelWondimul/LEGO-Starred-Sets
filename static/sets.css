@@ -110,3 +110,46 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
+#starred button {
+    display: inline-block;
+    position: relative;
+    width: 30px;
+    height: 30px;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    cursor: pointer;
+  }
+  
+  #starred button:before,
+  #starred button:after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    width: 15px;
+    height: 15px;
+    background-color: red;
+    transform: rotate(-45deg);
+    border-radius: 50%;
+  }
+  
+  #starred button:before {
+    left: 5px;
+  }
+  
+  #starred button:after {
+    right: 5px;
+  }
+  
+  #starred button:before {
+    border-radius: 50% 50% 0 0;
+  }
+  
+  #starred button:after {
+    border-radius: 50% 50% 50% 0;
+  }
+  
+  #starred button:hover:before,
+  #starred button:hover:after {
+    background-color: darkred;
+  }
