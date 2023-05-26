@@ -105,6 +105,15 @@
                      <td class = color1>{{set.theme_name}}</td>
                      <td class = color1>{{set.year}} </td> 
                      <td class = color1>{{set.part_count}}</td>
+                     <td class="color1">
+                        <form id="starred" >
+                          {% if set.star %}
+                            <button type="submit" class="star-btn"></button>
+                          {% else %}
+                            <button type="submit" class="star-btn"></button>
+                          {% endif %}
+                        </form>
+                      </td>
                   </tr>
                 {% endfor %}
             </tbody>
