@@ -57,6 +57,7 @@ def render_sets():
         sort_by = request.form["sort_by"]
         sort_dir = request.form["sort_dir"]
         page_num = request.form["page_num"]
+        star = request.form["star"]
         
 
     else:
@@ -68,6 +69,7 @@ def render_sets():
         sort_by = parse_int_list(request.args.get("sort_by", "set_name"),{"set_name", "year", "theme_name", "part_count"},"set_name")
         sort_dir = parse_int_list(request.args.get("sort_dir","asc"),{"asc","desc"}, "asc")
         page_num = check_part(request.args.get("page_num",1, type=int),1)
+        star = request.args.get("star",False, type=bool)
 
    
     
@@ -86,7 +88,7 @@ def render_sets():
      group by s.name,s.year,t.name,s.set_num
      having Count(s.num_parts) >= %(part_count_gte)s and Count(s.num_parts) <= %(part_count_lte)s
      order by {sort_by} {sort_dir}
-     limit %(limit)s
+     limit 500
      offset %(offset)s
     """
     #
@@ -98,6 +100,9 @@ def render_sets():
         "part_count_gte": part_count_gte,
         "part_count_lte": part_count_lte,
         "offset" : (page_num-1)*limit
+    }
+    params1 ={
+        "star" : f"%{star}%"
     }
     def get_sort_dir(col):
         if col == sort_by:
@@ -132,6 +137,7 @@ def render_sets():
      params)
         count = cur.fetchone()["count"]
 
+        cur.execute(f"update set set starred = {star} where name ilike %(set_name)s", params)
     
 
         return render_template("sets.html",
