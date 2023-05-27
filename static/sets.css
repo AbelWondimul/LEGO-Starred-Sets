@@ -15,6 +15,10 @@ form>label>span {
 body {
     background-image: url("/static/wallpaperflare.com_wallpaper.jpg");
 }
+.star-btn{
+    background-color: rgb(158, 15, 15);
+    color: #ed2334;
+}
 .body2 {
     background-position-x: center;
     -webkit-text-fill-color: aliceblue;
