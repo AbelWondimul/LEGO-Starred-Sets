@@ -61,7 +61,7 @@ def render_sets():
     '''    
 
     set_name = request.args.get("set_name", "")
-    set_name2 = request.args.get("set_name2", "")
+    set_num2 = request.args.get("set_num2", "")
     theme_name = request.args.get("theme_name", "")
     limit = parse_int_list2(request.args.get("limit", 50, type= int),{10,20,50}, 50)
     part_count_gte = check_part(request.args.get("part_count_gte", 0, type=int),0)
@@ -72,7 +72,6 @@ def render_sets():
     star = request.args.get("star",False, type=bool)
     
 
-   
     
     if sort_dir not in SORT_ORDER:
         sort_dir = "asc"
@@ -107,7 +106,7 @@ def render_sets():
     }
     params1 ={
         "star" : star,
-        "set_name2": f"%{set_name2}%"
+        "set_num2": f"%{set_num2}%"
     }
     def get_sort_dir(col):
         if col == sort_by:
@@ -142,7 +141,8 @@ def render_sets():
      params)
         count = cur.fetchone()["count"]
 
-        cur.execute("update set set starred = %(star)s where name ilike %(set_name2)s", params1)
+        cur.execute("update set set starred = %(star)s where name ilike %(set_num2)s", params1)
+        conn.commit()
         
     
 
@@ -158,17 +158,18 @@ def render_sets():
 
 @app.route("/my-sets", methods=['POST','GET'])
 def render_my_sets():
+    '''
     if request.method == 'POST':
         set_name = request.form["set_name"]
         theme_name = request.form["theme_name"]
         star = request.form["star"]
-        
 
     else:
         set_name = request.args.get("set_name", "")
         theme_name = request.args.get("theme_name", "")
         star = request.args.get("star",False, type=bool)
 
+    '''
    
     value= True
         
@@ -177,30 +178,26 @@ def render_my_sets():
     inner join theme t on s.theme_id = t.id
     inner join inventory i on s.set_num = i.set_num
     inner join inventory_part ip on ip.inventory_id = i.id 
-    where s.name ilike %(set_name)s
-        and s.starred is true 
+    where s.starred is true 
      group by s.name,s.year,t.name,s.set_num
      order by s.name
      limit 500
     """
-
+    '''
     params = {
         "set_name": f"%{set_name}%",
         "theme_name": f"%{theme_name}%",
         "star" : star
     }
+    '''
 
-    params1 ={
-        "star" : f"%{star}%"
-    }
+    
 
     with conn.cursor() as cur:
         cur.execute(f"""select s.name as set_name,Count(s.num_parts) as part_count, s.year,t.name as theme_name, s.set_num as set_num
-                        {from_where_clause}""",
-                    params)
+                        {from_where_clause}""")
         results = list(cur.fetchall())
 
-        cur.execute("update set SET starred = %(star)s where name ilike %(set_name)s", params)
 
         cur.execute("""select count(*) from 
                     (select s.name as set_name 
@@ -208,16 +205,14 @@ def render_my_sets():
     inner join theme t on s.theme_id = t.id
     inner join inventory i on s.set_num = i.set_num
     inner join inventory_part ip on ip.inventory_id = i.id 
-    where s.name ilike %(set_name)s
-        and t.name ilike %(theme_name)s and s.starred is true
+    where s.starred is true
      group by s.name,s.year,t.name,s.set_num
-     ) as count""",
-     params)
+     ) as count""")
         result_count_r = cur.fetchone()["count"]
     
 
         return render_template("sets.html",
                                params=request.args,
-                               sets=results,
+                               results=results,
                                Value= value,
                                result_count_r=result_count_r)
