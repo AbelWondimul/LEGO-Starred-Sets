@@ -57,6 +57,7 @@ def render_sets():
         sort_by = request.form["sort_by"]
         sort_dir = request.form["sort_dir"]
         page_num = request.form["page_num"]
+        star = request.form["star"]
         
 
     else:
@@ -68,6 +69,7 @@ def render_sets():
         sort_by = parse_int_list(request.args.get("sort_by", "set_name"),{"set_name", "year", "theme_name", "part_count"},"set_name")
         sort_dir = parse_int_list(request.args.get("sort_dir","asc"),{"asc","desc"}, "asc")
         page_num = check_part(request.args.get("page_num",1, type=int),1)
+        star = request.args.get("star",False, type=bool)
 
    
     
@@ -75,6 +77,8 @@ def render_sets():
         sort_dir = "asc"
     if sort_by not in SORT_COLUMNS:
         sort_by = "set_name"
+
+    value= True
         
     from_where_clause =f"""
     from set s
@@ -86,7 +90,7 @@ def render_sets():
      group by s.name,s.year,t.name,s.set_num
      having Count(s.num_parts) >= %(part_count_gte)s and Count(s.num_parts) <= %(part_count_lte)s
      order by {sort_by} {sort_dir}
-     limit %(limit)s
+     limit 500
      offset %(offset)s
     """
     #
@@ -97,7 +101,11 @@ def render_sets():
         "limit": limit,
         "part_count_gte": part_count_gte,
         "part_count_lte": part_count_lte,
-        "offset" : (page_num-1)*limit
+        "offset" : (page_num-1)*limit,
+        "star" : star
+    }
+    params1 ={
+        "star" : f"%{star}%"
     }
     def get_sort_dir(col):
         if col == sort_by:
@@ -132,6 +140,7 @@ def render_sets():
      params)
         count = cur.fetchone()["count"]
 
+        cur.execute("update set set starred = %(star)s where name ilike %(set_name)s", params)
     
 
         return render_template("sets.html",
@@ -140,5 +149,6 @@ def render_sets():
                                sets=results,
                                per_page = limit,
                                get_sort_dir=get_sort_dir,
-                               get_page_num=get_page_num)
+                               get_page_num=get_page_num,
+                               Value= value)
     
