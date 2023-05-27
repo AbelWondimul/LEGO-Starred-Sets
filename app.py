@@ -176,10 +176,8 @@ def render_my_sets():
     where s.name ilike %(set_name)s
         and s.starred is true 
      group by s.name,s.year,t.name,s.set_num
-     having Count(s.num_parts) >= %(part_count_gte)s and Count(s.num_parts) <= %(part_count_lte)s
      order by s.name
      limit 500
-     offset %(offset)s
     """
 
     params = {
@@ -199,9 +197,23 @@ def render_my_sets():
         results = list(cur.fetchall())
 
         cur.execute("update set SET starred = %(star)s where name ilike %(set_name)s", params)
+
+        cur.execute("""select count(*) from 
+                    (select s.name as set_name 
+                    from set s 
+    inner join theme t on s.theme_id = t.id
+    inner join inventory i on s.set_num = i.set_num
+    inner join inventory_part ip on ip.inventory_id = i.id 
+    where s.name ilike %(set_name)s
+        and t.name ilike %(theme_name)s and s.starred is true
+     group by s.name,s.year,t.name,s.set_num
+     ) as count""",
+     params)
+        result_count_r = cur.fetchone()["count"]
     
 
         return render_template("sets.html",
                                params=request.args,
                                sets=results,
-                               Value= value)
+                               Value= value,
+                               result_count_r=result_count_r)
