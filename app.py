@@ -152,7 +152,7 @@ def render_sets():
                                get_page_num=get_page_num,
                                Value= value)
     
-@app.route("/my-sets")
+@app.route("/my-sets", methods=['POST','GET'])
 def render_my_sets():
     if request.method == 'POST':
         set_name = request.form["set_name"]
