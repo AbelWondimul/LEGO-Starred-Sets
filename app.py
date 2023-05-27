@@ -151,7 +151,7 @@ def render_sets():
                                result_count_r=count,
                                sets=results,
                                per_page = limit,
-                               get_sort_dir=get_sort_,
+                               get_sort_dir=get_sort_dir,
                                get_page_num=get_page_num
                                 )
     
