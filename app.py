@@ -77,6 +77,8 @@ def render_sets():
         sort_dir = "asc"
     if sort_by not in SORT_COLUMNS:
         sort_by = "set_name"
+
+    value= True
         
     from_where_clause =f"""
     from set s
@@ -99,7 +101,8 @@ def render_sets():
         "limit": limit,
         "part_count_gte": part_count_gte,
         "part_count_lte": part_count_lte,
-        "offset" : (page_num-1)*limit
+        "offset" : (page_num-1)*limit,
+        "star" : star
     }
     params1 ={
         "star" : f"%{star}%"
@@ -137,7 +140,7 @@ def render_sets():
      params)
         count = cur.fetchone()["count"]
 
-        cur.execute(f"update set set starred = {star} where name ilike %(set_name)s", params)
+        cur.execute("update set set starred = %(star)s where name ilike %(set_name)s", params)
     
 
         return render_template("sets.html",
@@ -146,5 +149,6 @@ def render_sets():
                                sets=results,
                                per_page = limit,
                                get_sort_dir=get_sort_dir,
-                               get_page_num=get_page_num)
+                               get_page_num=get_page_num,
+                               Value= value)
     
