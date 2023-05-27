@@ -48,8 +48,9 @@ def hello_world():
 
 @app.route("/sets", methods= ['GET', 'POST'])
 def render_sets():
-    '''if request.method == 'POST':
+    if request.method == 'POST':
         set_name = request.form["set_name"]
+        set_num2 = request.form["set_num2"]
         theme_name = request.form["theme_name"]
         limit = request.form["limit"]
         part_count_gte = request.form["part_count_gte"]
@@ -58,18 +59,27 @@ def render_sets():
         sort_dir = request.form["sort_dir"]
         page_num = request.form["page_num"]
         star = request.form["star"]
-    '''    
 
-    set_name = request.args.get("set_name", "")
-    set_num2 = request.args.get("set_num2", "")
-    theme_name = request.args.get("theme_name", "")
-    limit = parse_int_list2(request.args.get("limit", 50, type= int),{10,20,50}, 50)
-    part_count_gte = check_part(request.args.get("part_count_gte", 0, type=int),0)
-    part_count_lte = check_part(request.args.get("part_count_lte", 100000, type=int),100000)
-    sort_by = parse_int_list(request.args.get("sort_by", "set_name"),{"set_name", "year", "theme_name", "part_count"},"set_name")
-    sort_dir = parse_int_list(request.args.get("sort_dir","asc"),{"asc","desc"}, "asc")
-    page_num = check_part(request.args.get("page_num",1, type=int),1)
-    star = request.args.get("star",False, type=bool)
+        
+
+        with conn.cursor() as cur:
+            cur.execute("update set set starred = %(star)s where set_num ilike %(set_num2)s", {
+                        "star" : star,
+                        "set_num2": f"%{set_num2}%"})
+            conn.commit() 
+       
+    else:
+        set_name = request.args.get("set_name", "")
+        set_num2 = request.args.get("set_num2", "")
+        theme_name = request.args.get("theme_name", "")
+        limit = parse_int_list2(request.args.get("limit", 50, type= int),{10,20,50}, 50)
+        part_count_gte = check_part(request.args.get("part_count_gte", 0, type=int),0)
+        part_count_lte = check_part(request.args.get("part_count_lte", 100000, type=int),100000)
+        sort_by = parse_int_list(request.args.get("sort_by", "set_name"),{"set_name", "year", "theme_name", "part_count"},"set_name")
+        sort_dir = parse_int_list(request.args.get("sort_dir","asc"),{"asc","desc"}, "asc")
+        page_num = check_part(request.args.get("page_num",1, type=int),1)
+        star = request.args.get("star",False, type=bool)
+        
     
 
     
@@ -158,18 +168,25 @@ def render_sets():
 
 @app.route("/my-sets", methods=['POST','GET'])
 def render_my_sets():
-    '''
+
     if request.method == 'POST':
         set_name = request.form["set_name"]
         theme_name = request.form["theme_name"]
+        set_num2 = request.form["set_num2", ""]
         star = request.form["star"]
+
+        with conn.cursor() as cur:
+            cur.execute("update set set starred = %(star)s where set_num ilike %(set_num2)s", {
+                        "star" : star,
+                        "set_num2": f"%{set_num2}%"})
+            conn.commit()    
 
     else:
         set_name = request.args.get("set_name", "")
         theme_name = request.args.get("theme_name", "")
         star = request.args.get("star",False, type=bool)
-
-    '''
+        set_num2 = request.args.get("set_num2","")
+    
    
     value= True
         
@@ -211,7 +228,7 @@ def render_my_sets():
         result_count_r = cur.fetchone()["count"]
     
 
-        return render_template("sets.html",
+        return render_template("my-sets.html",
                                params=request.args,
                                results=results,
                                Value= value,
