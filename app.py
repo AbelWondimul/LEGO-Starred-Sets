@@ -76,8 +76,11 @@ def render_sets():
         page_num = check_part(request.args.get("page_num",1, type=int),1)
         star = request.args.get("star",False, type=bool)
         
-        
-        
+    if len(set_num2) != 0:
+        if star is False:
+            star = True
+        star = False
+
         
         
     with conn.cursor() as cur:
@@ -160,8 +163,6 @@ def render_sets():
         cur.execute("update set set starred = %(star)s where name ilike %(set_num2)s", params1)
         conn.commit()
         
-    
-
         return render_template("sets.html",
                                params=request.args,
                                result_count_r=count,
@@ -193,6 +194,10 @@ def render_my_sets():
         star = request.args.get("star",False, type=bool)
         set_num2 = request.args.get("set_num2","")
     
+    if len(set_num2) != 0:
+        if star is False:
+            star = True
+        star = False
    
     value= True
         
