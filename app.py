@@ -152,3 +152,56 @@ def render_sets():
                                get_page_num=get_page_num,
                                Value= value)
     
+@app.route("/my-sets")
+def render_my_sets():
+    if request.method == 'POST':
+        set_name = request.form["set_name"]
+        theme_name = request.form["theme_name"]
+        star = request.form["star"]
+        
+
+    else:
+        set_name = request.args.get("set_name", "")
+        theme_name = request.args.get("theme_name", "")
+        star = request.args.get("star",False, type=bool)
+
+   
+    value= True
+        
+    from_where_clause ="""
+    from set s
+    inner join theme t on s.theme_id = t.id
+    inner join inventory i on s.set_num = i.set_num
+    inner join inventory_part ip on ip.inventory_id = i.id 
+    where s.name ilike %(set_name)s
+        and s.starred is true 
+     group by s.name,s.year,t.name,s.set_num
+     having Count(s.num_parts) >= %(part_count_gte)s and Count(s.num_parts) <= %(part_count_lte)s
+     order by s.name
+     limit 500
+     offset %(offset)s
+    """
+
+    params = {
+        "set_name": f"%{set_name}%",
+        "theme_name": f"%{theme_name}%",
+        "star" : star
+    }
+
+    params1 ={
+        "star" : f"%{star}%"
+    }
+
+    with conn.cursor() as cur:
+        cur.execute(f"""select s.name as set_name,Count(s.num_parts) as part_count, s.year,t.name as theme_name, s.set_num as set_num
+                        {from_where_clause}""",
+                    params)
+        results = list(cur.fetchall())
+
+        cur.execute("update set SET starred = %(star)s where name ilike %(set_name)s", params)
+    
+
+        return render_template("sets.html",
+                               params=request.args,
+                               sets=results,
+                               Value= value)
