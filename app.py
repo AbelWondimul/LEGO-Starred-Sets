@@ -70,6 +70,7 @@ def render_sets():
     sort_dir = parse_int_list(request.args.get("sort_dir","asc"),{"asc","desc"}, "asc")
     page_num = check_part(request.args.get("page_num",1, type=int),1)
     star = request.args.get("star",False, type=bool)
+    
 
    
     
@@ -105,7 +106,8 @@ def render_sets():
         "star" : star
     }
     params1 ={
-        "star" : f"%{star}%"
+        "star" : star,
+        "set_name2": f"%{set_name2}%"
     }
     def get_sort_dir(col):
         if col == sort_by:
@@ -140,7 +142,8 @@ def render_sets():
      params)
         count = cur.fetchone()["count"]
 
-        cur.execute("update set set starred = %(star)s where name ilike %(set_name)s", params)
+        cur.execute("update set set starred = %(star)s where name ilike %(set_name2)s", params1)
+        
     
 
         return render_template("sets.html",
@@ -149,9 +152,10 @@ def render_sets():
                                sets=results,
                                per_page = limit,
                                get_sort_dir=get_sort_dir,
-                               get_page_num=get_page_num,
-                               Value= value)
+                               get_page_num=get_page_num
+                                )
     
+
 @app.route("/my-sets", methods=['POST','GET'])
 def render_my_sets():
     if request.method == 'POST':
