@@ -62,11 +62,7 @@ def render_sets():
 
         
 
-        with conn.cursor() as cur:
-            cur.execute("update set set starred = %(star)s where set_num ilike %(set_num2)s", {
-                        "star" : star,
-                        "set_num2": f"%{set_num2}%"})
-            conn.commit() 
+       
        
     else:
         set_name = request.args.get("set_name", "")
@@ -79,6 +75,16 @@ def render_sets():
         sort_dir = parse_int_list(request.args.get("sort_dir","asc"),{"asc","desc"}, "asc")
         page_num = check_part(request.args.get("page_num",1, type=int),1)
         star = request.args.get("star",False, type=bool)
+        
+        
+        
+        
+        
+    with conn.cursor() as cur:
+        cur.execute("update set set starred = %(star)s where set_num ilike %(set_num2)s", {
+                        "star" : star,
+                        "set_num2": f"%{set_num2}%"})
+        conn.commit() 
         
     
 
