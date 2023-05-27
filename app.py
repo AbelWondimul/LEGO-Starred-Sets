@@ -155,4 +155,3 @@ def render_sets():
                                get_page_num=get_page_num
                                 )
     
-
