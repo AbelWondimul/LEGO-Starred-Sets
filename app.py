@@ -178,20 +178,21 @@ def render_my_sets():
 
     if request.method == 'POST':
         set_num2 = request.form["set_num2", ""]
-        star = request.form["star"]
+        
 
-        with conn.cursor() as cur:
-            cur.execute("update set set starred = %(star)s where set_num ilike %(set_num2)s", {
-                        "star" : star,
-                        "set_num2": f"%{set_num2}%"})
-            conn.commit()    
+        
 
     else:
-        star = request.args.get("star",False, type=bool)
+        
         set_num2 = request.args.get("set_num2","")
     
    
     value= True
+
+    with conn.cursor() as cur:
+        cur.execute("update set set starred = false where set_num = %(set_num2)s ", {
+                        "set_num2": set_num2})
+        conn.commit()     
         
     from_where_clause ="""
     from set s
@@ -203,13 +204,7 @@ def render_my_sets():
      order by s.name
      limit 500
     """
-    '''
-    params = {
-        "set_name": f"%{set_name}%",
-        "theme_name": f"%{theme_name}%",
-        "star" : star
-    }
-    '''
+    
 
     
 
