@@ -76,17 +76,14 @@ def render_sets():
         page_num = check_part(request.args.get("page_num",1, type=int),1)
         star = request.args.get("star",False, type=bool)
         
-    if len(set_num2) != 0:
-        if star is False:
-            star = True
-        star = False
-
         
+        # "set_num2": f"%{set_num2}%"
         
+     
     with conn.cursor() as cur:
-        cur.execute("update set set starred = %(star)s where set_num ilike %(set_num2)s", {
+        cur.execute("update set set starred = %(star)s where set_num = %(set_num2)s ", {
                         "star" : star,
-                        "set_num2": f"%{set_num2}%"})
+                        "set_num2": set_num2})
         conn.commit() 
         
     
@@ -160,16 +157,19 @@ def render_sets():
      params)
         count = cur.fetchone()["count"]
 
-        cur.execute("update set set starred = %(star)s where name ilike %(set_num2)s", params1)
-        conn.commit()
+        # cur.execute("update set set starred = %(star)s where name ilike %(set_num2)s", params1)
+        # conn.commit()
         
+    
+
         return render_template("sets.html",
                                params=request.args,
                                result_count_r=count,
                                sets=results,
                                per_page = limit,
                                get_sort_dir=get_sort_dir,
-                               get_page_num=get_page_num
+                               get_page_num=get_page_num,
+                               starred = star
                                 )
     
 
@@ -177,8 +177,6 @@ def render_sets():
 def render_my_sets():
 
     if request.method == 'POST':
-        set_name = request.form["set_name"]
-        theme_name = request.form["theme_name"]
         set_num2 = request.form["set_num2", ""]
         star = request.form["star"]
 
@@ -189,15 +187,9 @@ def render_my_sets():
             conn.commit()    
 
     else:
-        set_name = request.args.get("set_name", "")
-        theme_name = request.args.get("theme_name", "")
         star = request.args.get("star",False, type=bool)
         set_num2 = request.args.get("set_num2","")
     
-    if len(set_num2) != 0:
-        if star is False:
-            star = True
-        star = False
    
     value= True
         
