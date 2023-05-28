@@ -204,13 +204,7 @@ def render_my_sets():
      order by s.name
      limit 500
     """
-    '''
-    params = {
-        "set_name": f"%{set_name}%",
-        "theme_name": f"%{theme_name}%",
-        "star" : star
-    }
-    '''
+    
 
     
 
