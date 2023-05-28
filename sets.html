@@ -113,13 +113,14 @@
                         id="notstarred"
                         {%endif%}
                         method="get" action="/sets">
-                            <input type="hidden" name="set_num2" value="{{ set.set_num }}">
-                            {%if params.star %}
+                        {%if params.star and set.set_num == params.set_num2 %}
                             <input type="hidden" name="star" value = False>
                             {%else%}
                             <input type="hidden"  name="star" value = True>
                             {%endif%}
+                            <input type="hidden" name="set_num2" value="{{ set.set_num }}">
                             <button type="submit" class="star-btn">&#x2605;</button>
+                            
                         </form>
                       </td>
                   </tr>
@@ -130,7 +131,7 @@
     <h1 class = color1>No results :(</h1>
     {% endif %}
     
-        <tfoot>
+        <!-- <tfoot>
         <tr>
           <td colspan="5">
             {% if result_count_r > 0 %}
@@ -157,7 +158,7 @@
             {% endif %}
         </td>
         </tr>
-        </tfoot>
+        </tfoot> -->
     </table>
 </body>
 </html>
