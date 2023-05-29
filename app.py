@@ -134,7 +134,7 @@ def render_sets():
             return 1
 
     with conn.cursor() as cur:
-        cur.execute(f"""select s.name as set_name, s.num_parts as part_count, s.year,t.name as theme_name, s.set_num as set_num, s.starred as star
+        cur.execute(f"""select s.name as set_name,Count(s.num_parts) as part_count, s.year,t.name as theme_name, s.set_num as set_num, s.starred as star
                         {from_where_clause}""",
                     params)
         results = list(cur.fetchall())

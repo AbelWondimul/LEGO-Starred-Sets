@@ -43,12 +43,12 @@
                     
                     <th>
                         {% if params.sort_dir == 'asc'%}
-                        <a href="/sets?set_name={{params['set_name']}}&theme_name={{params['theme_name']}}&part_count_gte={{params['part_count_gte']}}&part_count_lte={{params['part_count_lte']}}&limit={{params['limit']}}&sort_by=set_num&sort_dir=desc&page_num={{get_page_num('page_num')}}">set_num{% if params.sort_by == 'set_num'%}↓{% endif%}</a>
+                        <a href="/sets?set_name={{params['set_name']}}&theme_name={{params['theme_name']}}&part_count_gte={{params['part_count_gte']}}&part_count_lte={{params['part_count_lte']}}&limit={{params['limit']}}&sort_by=set_num&sort_dir=desc&page_num={{get_page_num('page_num')}}">Set number{% if params.sort_by == 'set_num'%}↓{% endif%}</a>
                         {%else%}
-                        <a href="/sets?set_name={{params['set_name']}}&theme_name={{params['theme_name']}}&part_count_gte={{params['part_count_gte']}}&part_count_lte={{params['part_count_lte']}}&limit={{params['limit']}}&sort_by=set_num&sort_dir=asc&page_num={{get_page_num('page_num')}}">set_num{% if params.sort_by == 'set_num'%}↑{% endif%}</a>
+                        <a href="/sets?set_name={{params['set_name']}}&theme_name={{params['theme_name']}}&part_count_gte={{params['part_count_gte']}}&part_count_lte={{params['part_count_lte']}}&limit={{params['limit']}}&sort_by=set_num&sort_dir=asc&page_num={{get_page_num('page_num')}}">Set Number{% if params.sort_by == 'set_num'%}↑{% endif%}</a>
                         {%endif%}
                     </th>
-                    <th><a href="/sets?set_name={{params['set_name']}}&theme_name={{params['theme_name']}}&part_count_gte={{params['part_count_gte']}}&part_count_lte={{params['part_count_lte']}}&limit={{params['limit']}}&sort_by=set_name&sort_dir={{get_sort_dir('set_name')}}&page_num={{get_page_num('page_num')}}">set_name
+                    <th><a href="/sets?set_name={{params['set_name']}}&theme_name={{params['theme_name']}}&part_count_gte={{params['part_count_gte']}}&part_count_lte={{params['part_count_lte']}}&limit={{params['limit']}}&sort_by=set_name&sort_dir={{get_sort_dir('set_name')}}&page_num={{get_page_num('page_num')}}">Set Name
                         {% if params.sort_by== 'set_name'%}
                             {%if params.sort_dir == 'desc' %}
                             ↓
@@ -58,7 +58,7 @@
                         {%endif%}
 
                     </a></th>
-                    <th><a href="/sets?set_name={{params['set_name']}}&theme_name={{params['theme_name']}}&part_count_gte={{params['part_count_gte']}}&part_count_lte={{params['part_count_lte']}}&limit={{params['limit']}}&sort_by=theme_name&sort_dir={{get_sort_dir('theme_name')}}&page_num={{get_page_num('page_num')}}">theme_name
+                    <th><a href="/sets?set_name={{params['set_name']}}&theme_name={{params['theme_name']}}&part_count_gte={{params['part_count_gte']}}&part_count_lte={{params['part_count_lte']}}&limit={{params['limit']}}&sort_by=theme_name&sort_dir={{get_sort_dir('theme_name')}}&page_num={{get_page_num('page_num')}}">Theme Name
                         {% if params.sort_by== 'theme_name'%}
                             {%if params.sort_dir == 'desc' %}
                             ↓
@@ -67,7 +67,7 @@
                             {% endif %}
                         {%endif%}
                     </a></th>
-                    <th><a href="/sets?set_name={{params['set_name']}}&theme_name={{params['theme_name']}}&part_count_gte={{params['part_count_gte']}}&part_count_lte={{params['part_count_lte']}}&limit={{params['limit']}}&sort_by=year&sort_dir={{get_sort_dir('year')}}&page_num={{get_page_num('page_num')}}">year
+                    <th><a href="/sets?set_name={{params['set_name']}}&theme_name={{params['theme_name']}}&part_count_gte={{params['part_count_gte']}}&part_count_lte={{params['part_count_lte']}}&limit={{params['limit']}}&sort_by=year&sort_dir={{get_sort_dir('year')}}&page_num={{get_page_num('page_num')}}">Year
                         {% if params.sort_by== 'year'%}
                             {%if params.sort_dir == 'desc' %}
                             ↓
@@ -76,7 +76,7 @@
                             {% endif %}
                         {%endif%}
                     </a></th>
-                    <th><a href="/sets?set_name={{params['set_name']}}&theme_name={{params['theme_name']}}&part_count_gte={{params['part_count_gte']}}&part_count_lte={{params['part_count_lte']}}&limit={{params['limit']}}&sort_by=part_count&sort_dir={{get_sort_dir('part_count')}}&page_num={{get_page_num('page_num')}}">part_count
+                    <th><a href="/sets?set_name={{params['set_name']}}&theme_name={{params['theme_name']}}&part_count_gte={{params['part_count_gte']}}&part_count_lte={{params['part_count_lte']}}&limit={{params['limit']}}&sort_by=part_count&sort_dir={{get_sort_dir('part_count')}}&page_num={{get_page_num('page_num')}}">Piece Count
                         {% if params.sort_by== 'part_count'%}
                             {%if params.sort_dir == 'desc' %}
                             ↓
