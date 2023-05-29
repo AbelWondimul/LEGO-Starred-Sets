@@ -51,19 +51,14 @@ def render_sets():
     if request.method == 'POST':
         set_name = request.form["set_name"]
         set_num2 = request.form["set_num2"]
-        theme_name = request.form["theme_name"]
-        limit = request.form["limit"]
-        part_count_gte = request.form["part_count_gte"]
-        part_count_lte = request.form["part_count_lte"]
-        sort_by = request.form["sort_by"]
-        sort_dir = request.form["sort_dir"]
-        page_num = request.form["page_num"]
         star = request.form["star"]
-
-        
-
-       
-       
+        sort_by = 'set_name'
+        sort_dir = 'asc'
+        limit = 500
+        part_count_gte = 0
+        part_count_lte = 100000
+        page_num = 1
+        theme_name = ""
     else:
         set_name = request.args.get("set_name", "")
         set_num2 = request.args.get("set_num2", "")
@@ -75,6 +70,10 @@ def render_sets():
         sort_dir = parse_int_list(request.args.get("sort_dir","asc"),{"asc","desc"}, "asc")
         page_num = check_part(request.args.get("page_num",1, type=int),1)
         star = request.args.get("star",False, type=bool)
+        if sort_dir not in SORT_ORDER:
+            sort_dir = "asc"
+        if sort_by not in SORT_COLUMNS:
+            sort_by = "set_name"
         
         
         # "set_num2": f"%{set_num2}%"
@@ -89,10 +88,7 @@ def render_sets():
     
 
     
-    if sort_dir not in SORT_ORDER:
-        sort_dir = "asc"
-    if sort_by not in SORT_COLUMNS:
-        sort_by = "set_name"
+    
 
     value= True
         
@@ -139,7 +135,7 @@ def render_sets():
             return 1
 
     with conn.cursor() as cur:
-        cur.execute(f"""select s.name as set_name,Count(s.num_parts) as part_count, s.year,t.name as theme_name, s.set_num as set_num
+        cur.execute(f"""select s.name as set_name,Count(s.num_parts) as part_count, s.year,t.name as theme_name, s.set_num as set_num, s.starred as star
                         {from_where_clause}""",
                     params)
         results = list(cur.fetchall())
@@ -209,7 +205,7 @@ def render_my_sets():
     
 
     with conn.cursor() as cur:
-        cur.execute(f"""select s.name as set_name,Count(s.num_parts) as part_count, s.year,t.name as theme_name, s.set_num as set_num
+        cur.execute(f"""select s.name as set_name,Count(s.num_parts) as part_count, s.year,t.name as theme_name, s.set_num as set_num, s.starred as star
                         {from_where_clause}""")
         results = list(cur.fetchall())
 

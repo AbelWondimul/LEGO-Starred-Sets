@@ -106,22 +106,15 @@
                      <td class = color1>{{set.year}} </td> 
                      <td class = color1>{{set.part_count}}</td>
                      <td class="color1">
-                        <form  
-                        {% if set.starred == true %} 
-                        id="starred" 
-                        {%else%}
-                        id="notstarred"
-                        {%endif%}
-                        method="get" action="/sets">
-                        <!-- {%if params.star  %}
-                            <input type="hidden" name="star" value = False>
-                            
-                            {%else%} -->
-                            <input type="hidden"  name="star" value = True>
-                            <!-- {%endif%} -->
+                        <form   id="starred" method="post" action="/sets">
+                            {% if set.star %}
+                            <input type="hidden" name="star" value="false">
+                            {% else %}
+                            <input type="hidden" name="star" value="true">
+                            {% endif %}
                             <input type="hidden" name="set_name" value="{{params.set_name }}">
                             <input type="hidden" name="set_num2" value="{{ set.set_num }}">
-                            <button type="submit" class="star-btn">&#x2605;</button>
+                            <button type="submit" class="star-btn">{%if params.star is true %} &#11088; {% else %} &#10025; {% endif %}</button>
 
                             
                         </form>
