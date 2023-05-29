@@ -23,12 +23,12 @@
         </label>
         <label>
             <br>
-            <label  class = "c1" ><span>Result Per page:</span></label>
+            <label  class = "c1" ><span>Search by:</span></label>
 
-                <select class="in1" name= limit id="result_count" >
-                <option value= 10>10</option>
-                <option value= 50 selected>50</option>
-                <option value= 100>100</option>
+                <select class="in1" name= search_by id="result_count" >
+                <option value= 'true,false' selected> </option>
+                <option value= 'true' >starred</option>
+                <option value= 'false'>unstarred</option>
                 </select>
 
                 
@@ -40,7 +40,6 @@
 </body>
 <body>
     {% if result_count_r > 0 %}
-    <h1 class = color1>{{result_count_r}} results</h1>
         <style>
             table, th,td {
                 border: 1px solid black;
@@ -106,7 +105,7 @@
                      <td class = color1>{{ set.year }} </td> 
                      <td class = color1>{{ set.part_count }}</td>
                      <td class="color1">
-                        <form   id="starred" method="post" action="/sets">
+                        <form   id="starred" method="get" action="/sets">
                             {% if set.star %}
                             <input type="hidden" name="star" value="false">
                             {% else %}
