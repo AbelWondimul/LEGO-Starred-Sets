@@ -100,11 +100,11 @@
             <tbody>
                 {% for set in sets %}
                   <tr>
-                     <td class = color1>{{set.set_num}}</td>
-                     <td class = color1>{{set.set_name}}</td>
-                     <td class = color1>{{set.theme_name}}</td>
-                     <td class = color1>{{set.year}} </td> 
-                     <td class = color1>{{set.part_count}}</td>
+                     <td class = color1>{{ set.set_num }}</td>
+                     <td class = color1>{{ set.set_name }}</td>
+                     <td class = color1>{{ set.theme_name }}</td>
+                     <td class = color1>{{ set.year }} </td> 
+                     <td class = color1>{{ set.part_count }}</td>
                      <td class="color1">
                         <form   id="starred" method="post" action="/sets">
                             {% if set.star %}
@@ -114,7 +114,7 @@
                             {% endif %}
                             <input type="hidden" name="set_name" value="{{params.set_name }}">
                             <input type="hidden" name="set_num2" value="{{ set.set_num }}">
-                            <button type="submit" class="star-btn">{%if params.star is true %} &#11088; {% else %} &#10025; {% endif %}</button>
+                            <button type="submit" class="star-btn">{%if set.star %} &#11088; {% else %} &#10025; {% endif %}</button>
 
                             
                         </form>
