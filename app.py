@@ -59,6 +59,7 @@ def render_sets():
         part_count_lte = 100000
         page_num = 1
         theme_name = ""
+        search_by = 'true,false'
     else:
         set_name = request.args.get("set_name", "")
         set_num2 = request.args.get("set_num2", "")
@@ -70,27 +71,23 @@ def render_sets():
         sort_dir = parse_int_list(request.args.get("sort_dir","asc"),{"asc","desc"}, "asc")
         page_num = check_part(request.args.get("page_num",1, type=int),1)
         star = request.args.get("star",False, type=bool)
+        search_by = request.args.get("search_by","true,false")
+
         if sort_dir not in SORT_ORDER:
             sort_dir = "asc"
         if sort_by not in SORT_COLUMNS:
             sort_by = "set_name"
         
         
-        # "set_num2": f"%{set_num2}%"
-        
-     
+    if search_by not in ['true','false','true,false']:
+        search_by = 'true,false'
+
     with conn.cursor() as cur:
         cur.execute("update set set starred = %(star)s where set_num = %(set_num2)s ", {
                         "star" : star,
                         "set_num2": set_num2})
         conn.commit() 
         
-    
-
-    
-    
-
-    value= True
         
     from_where_clause =f"""
     from set s
@@ -98,14 +95,14 @@ def render_sets():
     inner join inventory i on s.set_num = i.set_num
     inner join inventory_part ip on ip.inventory_id = i.id 
     where s.name ilike %(set_name)s
-        and t.name ilike %(theme_name)s
+        and t.name ilike %(theme_name)s and s.starred IN ({search_by})
      group by s.name,s.year,t.name,s.set_num
      having Count(s.num_parts) >= %(part_count_gte)s and Count(s.num_parts) <= %(part_count_lte)s
      order by {sort_by} {sort_dir}
      limit 500
      offset %(offset)s
-    """
-    #
+     """
+    
 
     params = {
         "set_name": f"%{set_name}%",
@@ -169,17 +166,11 @@ def render_sets():
                                 )
     
 
-@app.route("/my-sets", methods=['POST','GET'])
+@app.route("/my-sets", methods=['GET','POST'])
 def render_my_sets():
-
     if request.method == 'POST':
-        set_num2 = request.form["set_num2", ""]
-        
-
-        
-
-    else:
-        
+        set_num2 = request.form["set_num2"]
+    else:        
         set_num2 = request.args.get("set_num2","")
     
    
