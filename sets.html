@@ -13,15 +13,6 @@
             <input class="in1" type="text" name=set_name value="{{params['set_name']}}">
         </label><br>
         <label>
-            <span>theme name:</span>
-            <input class="in1" type="text" name=theme_name value="{{params['theme_name']}}"><br>
-        </label>
-        <label>
-            <span>Part Count:</span>
-            <input class="in1"  type="number" name =part_count_gte value="{{params['part_count_gte']}}" placeholder="MIN">
-            <input class="in1"  type="number" name =part_count_lte value="{{params['part_count_lte']}}" placeholder="MAX">
-        </label>
-        <label>
             <br>
             <label  class = "c1" ><span>Search by:</span></label>
 
@@ -113,9 +104,10 @@
                             {% endif %}
                             <input type="hidden" name="set_name" value="{{params.set_name }}">
                             <input type="hidden" name="set_num2" value="{{ set.set_num }}">
+                            <input type="hidden" name="search_by" value="{{ search_by }}">
                             <button type="submit" class="star-btn">{%if set.star %} &#11088; {% else %} &#10025; {% endif %}</button>
-
-                            
+ 
+                             
                         </form>
                         <!-- {%if params.star  %}
                         <form method="get" action="/sets">
